@@ -2,6 +2,14 @@
   "name": "subatomic",
   "version": "0.0.1",
   "main": "dist/subatomic",
+  "keywords": [
+    "redux",
+    "duck",
+    "immutable",
+    "react",
+    "reselect",
+    "modular redux"
+  ],
   "scripts": {
     "clean": "rm -rf dist",
     "build": "cross-env NODE_ENV=production node node_modules/babel-cli/bin/babel.js src --out-dir dist",
