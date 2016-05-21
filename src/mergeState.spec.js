@@ -1,4 +1,4 @@
-import {Map, Set, Iterable} from 'immutable';
+import {Map, List, Set, Iterable} from 'immutable';
 import Sut from './mergeState.js';
 import {should} from 'chai';
 
@@ -55,10 +55,10 @@ describe('src/mergeState.js', function() {
         });
     });
 
-    describe('given an immutable default state', () => {
+    describe('given an immutable default state with indexed values', () => {
         beforeEach(() => {
             this.defaultState = new Map({
-                items: new Set(),
+                items: new List(),
                 selectedItem: null
             });
         });
@@ -131,7 +131,52 @@ describe('src/mergeState.js', function() {
                 this.actual = Sut(this.defaultState, this.state);
             });
 
-            it('it should return state with its data transformed into Records based on the matching @meta definition', () => {
+            it('it should return the arrays as indexed collections', () => {
+                Iterable.isIndexed(this.actual.get('items')).should.be.true;
+            });
+
+            it('it should return state with its each item transformed into Records based on the matching @meta definition', () => {
+                this.actual.get('items').size.should.equal(2);
+                this.actual.get('items').forEach((item) => item.id.should.not.be.null);
+            });
+        });
+    });
+
+    describe('given an immutable default state with keyed values', () => {
+        beforeEach(() => {
+            this.defaultState = new Map({
+                items: new Map(),
+                selectedItem: null
+            });
+        });
+
+        describe('when merging with a different POJO state with an object (key/value pair) that contains @meta definitions', () => {
+            beforeEach(() => {
+                this.state = {
+                    items: {
+                        'Item:1': {
+                            id: 'Item:1'
+                        }
+                        ,
+                        'Item:2': {
+                            id: 'Item:2'
+                        }
+                    },
+                    selectedItem: 'Item:2',
+                    '@meta': {
+                        items: {
+                            id: null
+                        }
+                    }
+                };
+                this.actual = Sut(this.defaultState, this.state);
+            });
+
+            it('it should return a keyed Map for the state dictionaries', () => {
+                Iterable.isKeyed(this.actual.get('items')).should.be.true;
+            });
+
+            it('it should return state with each item in the dictionary transformed into Records based on the matching @meta definition', () => {
                 this.actual.get('items').size.should.equal(2);
                 this.actual.get('items').forEach((item) => item.id.should.not.be.null);
             });
