@@ -1,5 +1,6 @@
 import {Map, Set, Iterable} from 'immutable';
 import Sut from './mergeState.js';
+import {should} from 'chai';
 
 describe('src/mergeState.js', function() {
     beforeEach(() => {
@@ -54,7 +55,7 @@ describe('src/mergeState.js', function() {
         });
     });
 
-    describe('given an immutable default state and no Record meta definitions', () => {
+    describe('given an immutable default state', () => {
         beforeEach(() => {
             this.defaultState = new Map({
                 items: new Set(),
@@ -62,7 +63,7 @@ describe('src/mergeState.js', function() {
             });
         });
 
-        describe('when merging with a different POJO state', () => {
+        describe('when merging with a different POJO state that does not contain Record @meta definitions', () => {
             beforeEach(() => {
                 this.state = {
                     items: [
@@ -80,6 +81,59 @@ describe('src/mergeState.js', function() {
 
             it('it should return an immutable structure', () => {
                 Iterable.isIterable(this.actual).should.be.true;
+            });
+        });
+
+        describe('when merging with a different POJO state that contains any @meta definitions', () => {
+            beforeEach(() => {
+                this.state = {
+                    items: [
+                        {
+                            id: 'Item:1'
+                        },
+                        {
+                            id: 'Item:2'
+                        }
+                    ],
+                    selectedItem: 'Item:2',
+                    '@meta': {
+                        items: {
+                            id: null
+                        }
+                    }
+                };
+                this.actual = Sut(this.defaultState, this.state);
+            });
+
+            it('it should return state without the @meta definitions as functions to return a Record', () => {
+                (typeof this.actual.getIn(['@meta', 'items'])).should.equal('function');
+            });
+        });
+
+        describe('when merging with a different POJO state with an array that contains @meta definitions', () => {
+            beforeEach(() => {
+                this.state = {
+                    items: [
+                        {
+                            id: 'Item:1'
+                        },
+                        {
+                            id: 'Item:2'
+                        }
+                    ],
+                    selectedItem: 'Item:2',
+                    '@meta': {
+                        items: {
+                            id: null
+                        }
+                    }
+                };
+                this.actual = Sut(this.defaultState, this.state);
+            });
+
+            it('it should return state with its data transformed into Records based on the matching @meta definition', () => {
+                this.actual.get('items').size.should.equal(2);
+                this.actual.get('items').forEach((item) => item.id.should.not.be.null);
             });
         });
     });
