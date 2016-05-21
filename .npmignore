@@ -1,0 +1,6 @@
+.editorconfig
+/src
+/.idea
+.babelrc
+/src/*.spec.js
+/specSetup
