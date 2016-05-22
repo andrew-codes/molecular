@@ -28,6 +28,6 @@ export default (defaultState, state) => {
                 return state.get(key).reduce((output, value, key) => output.mergeDeep({[key]: createItem(value)}), new Map());
             });
     }
-    return Object.assign({}, defaultState, state);
+    return fromJS(defaultState).mergeDeep(state);
 };
 

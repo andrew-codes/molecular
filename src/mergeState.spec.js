@@ -1,4 +1,4 @@
-import {Map, List, Set, Iterable} from 'immutable';
+import {Map, List, Set, Iterable, fromJS} from 'immutable';
 import Sut from './mergeState.js';
 import {should} from 'chai';
 
@@ -46,11 +46,16 @@ describe('src/mergeState.js', function() {
                     ],
                     selectedItem: 'Item:2'
                 };
+                this.expectedState = fromJS(this.defaultState).mergeDeep(this.state);
                 this.actual = Sut(this.defaultState, this.state);
             });
 
+            it('it should return an immutable state structure', () => {
+                Iterable.isIterable(this.actual).should.be.true;
+            });
+
             it('it should deeply merge the default state with the provide state', () => {
-                this.actual.should.eql(this.state);
+                this.actual.should.eql(this.expectedState);
             });
         });
     });
