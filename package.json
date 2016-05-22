@@ -1,6 +1,7 @@
 {
   "name": "molecular-js",
   "version": "0.0.1",
+  "description": "utilities to faciliate modular state management with Redux, ImmutableJS and Reselect",
   "main": "dist/subatomic",
   "keywords": [
     "redux",
