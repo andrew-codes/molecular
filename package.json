@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "immutable": "^3.8.1",
+    "invariant": "^2.2.1",
     "redux": "^3.5.2",
     "reselect": "^2.5.1"
   }
