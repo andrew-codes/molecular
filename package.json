@@ -1,5 +1,5 @@
 {
-  "name": "subatomic",
+  "name": "molecular-js",
   "version": "0.0.1",
   "main": "dist/subatomic",
   "keywords": [
@@ -8,7 +8,9 @@
     "immutable",
     "react",
     "reselect",
-    "modular redux"
+    "modular redux",
+    "state management",
+    "application state"
   ],
   "scripts": {
     "clean": "rm -rf dist",

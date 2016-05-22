@@ -2,5 +2,5 @@
 /src
 /.idea
 .babelrc
-/src/*.spec.js
 /specSetup
+/wallaby.js
